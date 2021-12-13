@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package es.v1;
+
+option go_package = "./api/proto/src";
+
+message EsRequest{
+  string user_id = 1;
+  string segment = 2;
+}
+message EsResponse{
+  string response = 1;
+}
+
+service EsService{
+  rpc Es(EsRequest)returns(EsResponse){};
+}
