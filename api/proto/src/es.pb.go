@@ -29,7 +29,7 @@ type EsRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	UserId  string `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	UserId  uint32 `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
 	Segment string `protobuf:"bytes,2,opt,name=segment,proto3" json:"segment,omitempty"`
 }
 
@@ -65,11 +65,11 @@ func (*EsRequest) Descriptor() ([]byte, []int) {
 	return file_api_proto_es_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *EsRequest) GetUserId() string {
+func (x *EsRequest) GetUserId() uint32 {
 	if x != nil {
 		return x.UserId
 	}
-	return ""
+	return 0
 }
 
 func (x *EsRequest) GetSegment() string {
@@ -126,23 +126,129 @@ func (x *EsResponse) GetResponse() string {
 	return ""
 }
 
+type EstimationRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Segment string `protobuf:"bytes,1,opt,name=segment,proto3" json:"segment,omitempty"`
+}
+
+func (x *EstimationRequest) Reset() {
+	*x = EstimationRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_proto_es_proto_msgTypes[2]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *EstimationRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*EstimationRequest) ProtoMessage() {}
+
+func (x *EstimationRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_api_proto_es_proto_msgTypes[2]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use EstimationRequest.ProtoReflect.Descriptor instead.
+func (*EstimationRequest) Descriptor() ([]byte, []int) {
+	return file_api_proto_es_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *EstimationRequest) GetSegment() string {
+	if x != nil {
+		return x.Segment
+	}
+	return ""
+}
+
+type EstimationResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Estimation uint32 `protobuf:"varint,1,opt,name=estimation,proto3" json:"estimation,omitempty"`
+}
+
+func (x *EstimationResponse) Reset() {
+	*x = EstimationResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_proto_es_proto_msgTypes[3]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *EstimationResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*EstimationResponse) ProtoMessage() {}
+
+func (x *EstimationResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_api_proto_es_proto_msgTypes[3]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use EstimationResponse.ProtoReflect.Descriptor instead.
+func (*EstimationResponse) Descriptor() ([]byte, []int) {
+	return file_api_proto_es_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *EstimationResponse) GetEstimation() uint32 {
+	if x != nil {
+		return x.Estimation
+	}
+	return 0
+}
+
 var File_api_proto_es_proto protoreflect.FileDescriptor
 
 var file_api_proto_es_proto_rawDesc = []byte{
 	0x0a, 0x12, 0x61, 0x70, 0x69, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x65, 0x73, 0x2e, 0x70,
 	0x72, 0x6f, 0x74, 0x6f, 0x12, 0x05, 0x65, 0x73, 0x2e, 0x76, 0x31, 0x22, 0x3e, 0x0a, 0x09, 0x45,
 	0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x17, 0x0a, 0x07, 0x75, 0x73, 0x65, 0x72,
-	0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x75, 0x73, 0x65, 0x72, 0x49,
+	0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x06, 0x75, 0x73, 0x65, 0x72, 0x49,
 	0x64, 0x12, 0x18, 0x0a, 0x07, 0x73, 0x65, 0x67, 0x6d, 0x65, 0x6e, 0x74, 0x18, 0x02, 0x20, 0x01,
 	0x28, 0x09, 0x52, 0x07, 0x73, 0x65, 0x67, 0x6d, 0x65, 0x6e, 0x74, 0x22, 0x28, 0x0a, 0x0a, 0x45,
 	0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x1a, 0x0a, 0x08, 0x72, 0x65, 0x73,
 	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x72, 0x65, 0x73,
-	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x32, 0x38, 0x0a, 0x09, 0x45, 0x73, 0x53, 0x65, 0x72, 0x76, 0x69,
-	0x63, 0x65, 0x12, 0x2b, 0x0a, 0x02, 0x45, 0x73, 0x12, 0x10, 0x2e, 0x65, 0x73, 0x2e, 0x76, 0x31,
-	0x2e, 0x45, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x11, 0x2e, 0x65, 0x73, 0x2e,
-	0x76, 0x31, 0x2e, 0x45, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x42,
-	0x11, 0x5a, 0x0f, 0x2e, 0x2f, 0x61, 0x70, 0x69, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x73,
-	0x72, 0x63, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x2d, 0x0a, 0x11, 0x45, 0x73, 0x74, 0x69, 0x6d, 0x61, 0x74,
+	0x69, 0x6f, 0x6e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x18, 0x0a, 0x07, 0x73, 0x65,
+	0x67, 0x6d, 0x65, 0x6e, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x73, 0x65, 0x67,
+	0x6d, 0x65, 0x6e, 0x74, 0x22, 0x34, 0x0a, 0x12, 0x45, 0x73, 0x74, 0x69, 0x6d, 0x61, 0x74, 0x69,
+	0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x1e, 0x0a, 0x0a, 0x65, 0x73,
+	0x74, 0x69, 0x6d, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x0a,
+	0x65, 0x73, 0x74, 0x69, 0x6d, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x32, 0x8b, 0x01, 0x0a, 0x09, 0x45,
+	0x73, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12, 0x39, 0x0a, 0x10, 0x45, 0x73, 0x53, 0x61,
+	0x76, 0x65, 0x53, 0x65, 0x67, 0x6d, 0x65, 0x6e, 0x74, 0x54, 0x61, 0x67, 0x12, 0x10, 0x2e, 0x65,
+	0x73, 0x2e, 0x76, 0x31, 0x2e, 0x45, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x11,
+	0x2e, 0x65, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x45, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
+	0x65, 0x22, 0x00, 0x12, 0x43, 0x0a, 0x0a, 0x45, 0x73, 0x74, 0x69, 0x6d, 0x61, 0x74, 0x69, 0x6f,
+	0x6e, 0x12, 0x18, 0x2e, 0x65, 0x73, 0x2e, 0x76, 0x31, 0x2e, 0x45, 0x73, 0x74, 0x69, 0x6d, 0x61,
+	0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x19, 0x2e, 0x65, 0x73,
+	0x2e, 0x76, 0x31, 0x2e, 0x45, 0x73, 0x74, 0x69, 0x6d, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x65,
+	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x42, 0x11, 0x5a, 0x0f, 0x2e, 0x2f, 0x61, 0x70,
+	0x69, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x73, 0x72, 0x63, 0x62, 0x06, 0x70, 0x72, 0x6f,
+	0x74, 0x6f, 0x33,
 }
 
 var (
@@ -157,16 +263,20 @@ func file_api_proto_es_proto_rawDescGZIP() []byte {
 	return file_api_proto_es_proto_rawDescData
 }
 
-var file_api_proto_es_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+var file_api_proto_es_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
 var file_api_proto_es_proto_goTypes = []interface{}{
-	(*EsRequest)(nil),  // 0: es.v1.EsRequest
-	(*EsResponse)(nil), // 1: es.v1.EsResponse
+	(*EsRequest)(nil),          // 0: es.v1.EsRequest
+	(*EsResponse)(nil),         // 1: es.v1.EsResponse
+	(*EstimationRequest)(nil),  // 2: es.v1.EstimationRequest
+	(*EstimationResponse)(nil), // 3: es.v1.EstimationResponse
 }
 var file_api_proto_es_proto_depIdxs = []int32{
-	0, // 0: es.v1.EsService.Es:input_type -> es.v1.EsRequest
-	1, // 1: es.v1.EsService.Es:output_type -> es.v1.EsResponse
-	1, // [1:2] is the sub-list for method output_type
-	0, // [0:1] is the sub-list for method input_type
+	0, // 0: es.v1.EsService.EsSaveSegmentTag:input_type -> es.v1.EsRequest
+	2, // 1: es.v1.EsService.Estimation:input_type -> es.v1.EstimationRequest
+	1, // 2: es.v1.EsService.EsSaveSegmentTag:output_type -> es.v1.EsResponse
+	3, // 3: es.v1.EsService.Estimation:output_type -> es.v1.EstimationResponse
+	2, // [2:4] is the sub-list for method output_type
+	0, // [0:2] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
 	0, // [0:0] is the sub-list for extension extendee
 	0, // [0:0] is the sub-list for field type_name
@@ -202,6 +312,30 @@ func file_api_proto_es_proto_init() {
 				return nil
 			}
 		}
+		file_api_proto_es_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*EstimationRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_proto_es_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*EstimationResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -209,7 +343,7 @@ func file_api_proto_es_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_api_proto_es_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   2,
+			NumMessages:   4,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
@@ -235,7 +369,8 @@ const _ = grpc.SupportPackageIsVersion6
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type EsServiceClient interface {
-	Es(ctx context.Context, in *EsRequest, opts ...grpc.CallOption) (*EsResponse, error)
+	EsSaveSegmentTag(ctx context.Context, in *EsRequest, opts ...grpc.CallOption) (*EsResponse, error)
+	Estimation(ctx context.Context, in *EstimationRequest, opts ...grpc.CallOption) (*EstimationResponse, error)
 }
 
 type esServiceClient struct {
@@ -246,9 +381,18 @@ func NewEsServiceClient(cc grpc.ClientConnInterface) EsServiceClient {
 	return &esServiceClient{cc}
 }
 
-func (c *esServiceClient) Es(ctx context.Context, in *EsRequest, opts ...grpc.CallOption) (*EsResponse, error) {
+func (c *esServiceClient) EsSaveSegmentTag(ctx context.Context, in *EsRequest, opts ...grpc.CallOption) (*EsResponse, error) {
 	out := new(EsResponse)
-	err := c.cc.Invoke(ctx, "/es.v1.EsService/Es", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/es.v1.EsService/EsSaveSegmentTag", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *esServiceClient) Estimation(ctx context.Context, in *EstimationRequest, opts ...grpc.CallOption) (*EstimationResponse, error) {
+	out := new(EstimationResponse)
+	err := c.cc.Invoke(ctx, "/es.v1.EsService/Estimation", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -257,35 +401,57 @@ func (c *esServiceClient) Es(ctx context.Context, in *EsRequest, opts ...grpc.Ca
 
 // EsServiceServer is the server API for EsService service.
 type EsServiceServer interface {
-	Es(context.Context, *EsRequest) (*EsResponse, error)
+	EsSaveSegmentTag(context.Context, *EsRequest) (*EsResponse, error)
+	Estimation(context.Context, *EstimationRequest) (*EstimationResponse, error)
 }
 
 // UnimplementedEsServiceServer can be embedded to have forward compatible implementations.
 type UnimplementedEsServiceServer struct {
 }
 
-func (*UnimplementedEsServiceServer) Es(context.Context, *EsRequest) (*EsResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Es not implemented")
+func (*UnimplementedEsServiceServer) EsSaveSegmentTag(context.Context, *EsRequest) (*EsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method EsSaveSegmentTag not implemented")
+}
+func (*UnimplementedEsServiceServer) Estimation(context.Context, *EstimationRequest) (*EstimationResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Estimation not implemented")
 }
 
 func RegisterEsServiceServer(s *grpc.Server, srv EsServiceServer) {
 	s.RegisterService(&_EsService_serviceDesc, srv)
 }
 
-func _EsService_Es_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _EsService_EsSaveSegmentTag_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(EsRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(EsServiceServer).Es(ctx, in)
+		return srv.(EsServiceServer).EsSaveSegmentTag(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/es.v1.EsService/Es",
+		FullMethod: "/es.v1.EsService/EsSaveSegmentTag",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(EsServiceServer).Es(ctx, req.(*EsRequest))
+		return srv.(EsServiceServer).EsSaveSegmentTag(ctx, req.(*EsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _EsService_Estimation_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(EstimationRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(EsServiceServer).Estimation(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/es.v1.EsService/Estimation",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(EsServiceServer).Estimation(ctx, req.(*EstimationRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -295,8 +461,12 @@ var _EsService_serviceDesc = grpc.ServiceDesc{
 	HandlerType: (*EsServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "Es",
-			Handler:    _EsService_Es_Handler,
+			MethodName: "EsSaveSegmentTag",
+			Handler:    _EsService_EsSaveSegmentTag_Handler,
+		},
+		{
+			MethodName: "Estimation",
+			Handler:    _EsService_Estimation_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
