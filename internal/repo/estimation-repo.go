@@ -7,7 +7,6 @@ import (
 	"github.com/gammazero/deque"
 	"github.com/jackc/pgx/v4"
 	"github.com/jackc/pgx/v4/pgxpool"
-	"log"
 	"time"
 )
 
@@ -20,6 +19,7 @@ type ExecBatchItem struct {
 type EstimationRepo interface {
 	SaveSegmentTagForUser(model.Estimation)
 	GetSegmentTagFor14dLastDays(segment string) (uint32, error)
+	DbEexecCronTask() error
 }
 
 type EstimationRepoImpl struct {
@@ -29,7 +29,7 @@ type EstimationRepoImpl struct {
 
 func (e *EstimationRepoImpl) GetSegmentTagFor14dLastDays(segment string) (uint32, error) {
 	var count uint32
-	err := e.pool.QueryRow(context.Background(), "select count(*) from live_users where created_at<$1 and segment='$2'", time.Now().AddDate(0, 0, -14), segment).Scan(&count)
+	err := e.pool.QueryRow(context.Background(), "select count(*) from live_users where created_at<$1 and segment=$2", time.Now().AddDate(0, 0, -14), segment).Scan(&count)
 	return count, err
 }
 
@@ -43,12 +43,13 @@ func (e *EstimationRepoImpl) SaveSegmentTagForUser(estimation model.Estimation) 
 }
 
 // DbEexecQueueTask its run on the another go routine every insert gets queued  and  on every 50 Millisecond send all the data in queue
+//todo move logic to the service liar later
 func (e *EstimationRepoImpl) DbEexecQueueTask() {
 
 	TimeTicker := time.NewTicker(50 * time.Millisecond)
 
 	var PgxBatch pgx.Batch
-	var query_q deque.Deque
+	var queryQ deque.Deque
 
 	for {
 		select {
@@ -56,33 +57,33 @@ func (e *EstimationRepoImpl) DbEexecQueueTask() {
 		case ExexQueueItem := <-e.DbExexQueue:
 
 			PgxBatch.Queue(ExexQueueItem.Query, ExexQueueItem.Arguments...)
-			query_q.PushFront(ExexQueueItem)
+			queryQ.PushFront(ExexQueueItem)
 			if PgxBatch.Len() > 5000 {
 				if err := e.pool.SendBatch(context.Background(), &PgxBatch).Close(); err != nil {
-					query_q_len := query_q.Len()
+					query_q_len := queryQ.Len()
 					for i := 0; i < query_q_len; i++ {
-						ExecInfo := query_q.PopBack().(ExecBatchItem)
+						ExecInfo := queryQ.PopBack().(ExecBatchItem)
 						if _, err := e.pool.Exec(context.Background(), ExecInfo.Query, ExecInfo.Arguments...); err != nil {
 							fmt.Println(err)
 						}
 					}
 				}
-				query_q.Clear()
+				queryQ.Clear()
 				PgxBatch = pgx.Batch{}
 			}
 
 		case <-TimeTicker.C:
 			if PgxBatch.Len() > 0 {
 				if err := e.pool.SendBatch(context.Background(), &PgxBatch).Close(); err != nil {
-					query_q_len := query_q.Len()
+					query_q_len := queryQ.Len()
 					for i := 0; i < query_q_len; i++ {
-						ExecInfo := query_q.PopBack().(ExecBatchItem)
+						ExecInfo := queryQ.PopBack().(ExecBatchItem)
 						if _, err := e.pool.Exec(context.Background(), ExecInfo.Query, ExecInfo.Arguments...); err != nil {
 							fmt.Println(err)
 						}
 					}
 				}
-				query_q.Clear()
+				queryQ.Clear()
 				PgxBatch = pgx.Batch{}
 			}
 
@@ -91,34 +92,24 @@ func (e *EstimationRepoImpl) DbEexecQueueTask() {
 	}
 }
 
-// DbEexecCronTask transmute data from live table to archive table on every 6 Hour
-func (e *EstimationRepoImpl) DbEexecCronTask() {
+// DbEexecCronTask transmute data from live table to archive table
+func (e *EstimationRepoImpl) DbEexecCronTask() error {
 
-	TimeTickerMoveToArchive := time.NewTicker(6 * time.Hour)
-
-	for {
-		select {
-
-		case <-TimeTickerMoveToArchive.C:
-			two_week_ago := time.Now().AddDate(0, 0, -14)
-			_, err := e.pool.Exec(context.Background(), "insert into archive_users select * from live_users where created_at < $1", two_week_ago)
-			if err != nil {
-				log.Printf("error in insert into archive_users %v", err)
-			}
-			_, err = e.pool.Exec(context.Background(), "delete from live_users where created_at < $1", two_week_ago)
-			if err != nil {
-				log.Printf("error in delete from live_users %v", err)
-
-			}
-
-		}
-
+	two_week_ago := time.Now().AddDate(0, 0, -14)
+	_, err := e.pool.Exec(context.Background(), "insert into archive_users select * from live_users where created_at < $1", two_week_ago)
+	if err != nil {
+		return err
 	}
+	_, err = e.pool.Exec(context.Background(), "delete from live_users where created_at < $1", two_week_ago)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func NewEstimationRepo(pool *pgxpool.Pool) *EstimationRepoImpl {
 	e := &EstimationRepoImpl{pool: pool, DbExexQueue: make(chan ExecBatchItem, 1000000)}
 	go e.DbEexecQueueTask()
-	go e.DbEexecCronTask()
 	return e
 }
