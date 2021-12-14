@@ -12,7 +12,9 @@ type EstimationService struct {
 }
 
 func NewEstimationService(estimationRepo repo.EstimationRepo) *EstimationService {
-	return &EstimationService{estimationRepo: estimationRepo}
+	e := &EstimationService{estimationRepo: estimationRepo}
+	go e.moveDataToArchiveTable()
+	return e
 }
 
 func (e *EstimationService) SaveSegmentTagForUser(userid uint32, segment string) error {
@@ -29,7 +31,7 @@ func (e *EstimationService) GetSegmentTagFor14dLastDays(segment string) (uint32,
 	return count, err
 }
 
-func (e *EstimationService) moveDataToArchiveTable() error {
+func (e *EstimationService) moveDataToArchiveTable() {
 	TimeTickerMoveToArchive := time.NewTicker(6 * time.Hour)
 	for {
 		select {
